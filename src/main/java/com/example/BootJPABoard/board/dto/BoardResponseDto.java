@@ -36,3 +36,4 @@ public class BoardResponseDto {
 }
 // 응답도 마찬가지로 Entity클래스가 사용되서는 안되기 때문에 클래스를 분리
 // 응답 객체 생성은 필수적으로 Entity클래스를 필요로 하며
+// 커밋
