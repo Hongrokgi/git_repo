@@ -63,7 +63,7 @@
 		 */
 		 function findAll() {
 
-			fetch('/api/boards').then(response => {
+			fetch('/api/boards?deleteYn=N').then(response => {
 				if (response.ok) {
    					return response.json();
 				}

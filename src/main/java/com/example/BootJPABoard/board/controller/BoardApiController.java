@@ -39,8 +39,8 @@ public class BoardApiController {
     *  게시글 리스트 조회
     */
     @GetMapping("/boards")
-    public List<BoardResponseDto> findAll() {
-        return boardService.findAll();
+    public List<BoardResponseDto> findAll(@RequestParam final char deleteYn) {
+        return boardService.findAllByDeleteYn(deleteYn);
     }
 
     /* 게시글 상세 정보 조회 */
