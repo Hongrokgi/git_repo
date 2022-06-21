@@ -1,15 +1,40 @@
 package com.example.BootJPABoard.board.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.example.BootJPABoard.board.dto.BoardRequestDto;
+import com.example.BootJPABoard.board.dto.BoardResponseDto;
+import com.example.BootJPABoard.board.model.BoardService;
+import com.example.BootJPABoard.exception.CustomException;
+import com.example.BootJPABoard.exception.ErrorCode;
+import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api")
+@RequiredArgsConstructor
 public class BoardApiController {
-    @GetMapping("/test")
-    public String test(){
-        throw new RuntimeException("Holy! Exception..");
+
+    private final BoardService boardService;
+    /*
+    *   게시글 생성
+    */
+    @PostMapping("/boards")
+    public Long save(@RequestBody final BoardRequestDto params) {
+        return boardService.save(params);
     }
-    //127.0.0.1:8070/api/test
+    /*
+    *  게시글 리스트 조회
+    */
+    @GetMapping("/boards")
+    public List<BoardResponseDto> findAll() {
+        return boardService.findAll();
+    }
+    /*
+    *  게시글 수정
+    */
+    @PatchMapping("/boards/{id}")
+    public Long save(@PathVariable final Long id, @RequestBody final BoardRequestDto params) {
+        return boardService.update(id, params);
+    }
 }

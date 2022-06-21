@@ -4,6 +4,8 @@ import com.example.BootJPABoard.board.dto.BoardRequestDto;
 import com.example.BootJPABoard.board.dto.BoardResponseDto;
 import com.example.BootJPABoard.board.entity.Board;
 import com.example.BootJPABoard.board.entity.BoardRepository;
+import com.example.BootJPABoard.exception.CustomException;
+import com.example.BootJPABoard.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Sort;
 import org.springframework.jdbc.support.CustomSQLExceptionTranslatorRegistrar;
@@ -51,7 +53,7 @@ public class BoardService {
     /*게시글 수정*/
     @Transactional
     public Long update(final Long id, final BoardRequestDto params) {
-        Board entity=boardRepository.findById(id).orElseThrow();
+        Board entity=boardRepository.findById(id).orElseThrow(()-> new CustomException(ErrorCode.POSTS_NOT_FOUND));
         entity.update(params.getTitle(), params.getContent(), params.getWriter());
         return id;
     }
@@ -63,4 +65,16 @@ public class BoardService {
     //Entity를 조회하면 해당 Entity는 영속성 컨텍스트에 보관(포함)될 테고, 영속성 컨텍스트에 포함된 Entity 객체의 값이 변경되면
     //트랜잭션이 종료(commit)되는 시점에 update쿼리를 실행. 이렇게 자동으로 쿼리가 실행되는 개념을 더티체킹(Dirty Checking)
     //"영속성 컨텍스트에 의해 더티체킹이 가능해진다고 이해하면됨
+
+    //findById(id).orElseThrow(() -> ..)
+    //JPA Repository의 findById()는 Java8에서 도입된 Optional 클래스를 리턴
+    //Optional -> 반복적인 Null처리를 피하기 위해 사용되는 클래스
+    //orElseThrow()는 Optional 클래스에 포함된 메소드로 Entity 조회와 예외처리를 단 한 줄로 처리할 수 있는 것
+    //만약에 풀어서 쓴다고 하면
+    //Board entity =  boardRepository.findById(id).orElse(null);
+    // if(entity == null) {
+    // throw new CustomException(ErrorCode.POSTS_NOT_FOUND);
+    //}
+    // entity.update(params.getTitle(), params.getContent(), params.getWriter());
+    //return id; 라는 코드가 될텐데 가독성 측면에서는 좋지만, 코드라인을 기준으로 보면 그렇지 않을 수 있음
 }

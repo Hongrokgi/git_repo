@@ -48,10 +48,9 @@ public class Board {
         this.writer=writer;
         this.modifiedDate= LocalDateTime.now();
     }
+    /*조회 수 증가*/
+    public void increaseHits() {
+        this.hits++;
+    }
+    /*게시글 삭제*/
 }
-//@Setter가 없다?
-//엔티티는 테이블 그 자체, 이는 각각의 멤버변수는 해당 테이블의 컬림이라는 의미, 무작정 setter을 생성하는 경우
-//객체의 값이 어느 시점에 변경됐는지 알 수 없다.
-//이런 이유로 Entity클래스에는 절대 Set메서드가 존재해서는 안된다.
-
-//기존 Board클래스에update()메서드 추가

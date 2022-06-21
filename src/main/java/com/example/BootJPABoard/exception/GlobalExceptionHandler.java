@@ -1,28 +1,49 @@
 package com.example.BootJPABoard.exception;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 @Slf4j
 public class GlobalExceptionHandler {
-    @ExceptionHandler(RuntimeException.class)
-    public String handleRuntimeException(final RuntimeException e) {
-        log.error("handleRuntimeException : {}", e.getMessage());
-        return e.getMessage();
+    /*
+    *   Developer Custom Exception
+    */
+    @ExceptionHandler(CustomException.class)
+    protected ResponseEntity<ErrorResponse> handleCustomException(final CustomException e) {
+        log.error("handleCustomException: {}", e.getErrorCode());
+        return ResponseEntity
+                .status(e.getErrorCode().getStatus().value())
+                .body(new ErrorResponse(e.getErrorCode()));
     }
-    //Spring 은 예외처리를 위해  @ControllerAdvice 와 @ExceptionHandler 등의 기능을 지원
-    //@ControllerAdivce 는 컨트롤 전역에서 발생하는 예외를 잡아 Throw 해주고
-    //@ExceptionHandler 는 특정 클래스에서 발생하는 예외를 잡아 Throw 합니다
-    //일반적으로 @ExceptionHandler는 @ControllerAdvice가 선언된 클래스에 포함된 메서드에 선언
-    //이번 예제는 페이지에 대한 예외처리는 의미가 없으므로 @RestControllerAdvice선언 해당 어노테이션은
-    //@ControllerAdivce에 @ResponseBody가 적용된 의미로 받아들이면된다.
-
-    //@Slf4j 롬복에서 제공해주는 기능으로, 해당 어노테이션이 선언된 클래스에 자동으로 로그 객체를 생성
-    //log.error(), log.debug()와 같이 로깅관련메서드 사용가능
-
-    //@ExceptionHandler(RuntimeException.class)
-    //속성으로 RuntimeException.class 지정 // BoardApiController에서 RuntimeException Throw..
-    //GlobalExceptionHandler는 handleRuntimeException메서드 실행
+    /*
+    *   HTTP 405 Exception
+    */
+    @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
+    protected ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException(final HttpRequestMethodNotSupportedException e) {
+        log.error("handleHttpRequestMethodNotSupportedException : {}",e.getMessage());
+        return ResponseEntity
+                .status(ErrorCode.METHOD_NOT_ALLOWED.getStatus().value())
+                .body(new ErrorResponse(ErrorCode.METHOD_NOT_ALLOWED));
+    }
+    /*
+    *   HTTP 500 Exception
+    */
+    @ExceptionHandler(Exception.class)
+    protected ResponseEntity<ErrorResponse> handleException(final Exception e) {
+        log.error("handleException : {}", e.getMessage());
+        return ResponseEntity
+                .status(ErrorCode.INTERNAL_SERVER_ERROR.getStatus().value())
+                .body(new ErrorResponse(ErrorCode.INTERNAL_SERVER_ERROR));
+    }
+    // 앞에서 다루었던 GlobalExceptionHandler
+    // 기존에 작성한 RuntimeException에 대한 예외처리 메서드는 로직에서 제외되고
+    // 개발자가 직접 정의한 CutomException과 HTTP 405, HTTP 500에 대한 Handler가 추가
+    // ResponseEntity<ErrorResponse>
+    // ResponseEntity<T>는 HTTP Request에 대한 응답 데이터를 포함하는 클래스로, <Type>에 해당하는
+    // 데이터와 HTTP 상태코드를 함께 리턴할 수 있음
+    // 우리는 예외가 발생했을 때, ErrorResponse 형식으로 예외 정보를 Reponse 로 내려주게 됩니다.
 }
