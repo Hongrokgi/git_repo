@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration debug="true">
+    <!-- Appenders -->
+    <!-- appender : 전달받은 로그를 어디에 출력할지 결정(콘솔출력, 파일저장, 데이터베이스 저장 등)-->
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder> <!--encoder : appender에 포함되어 출력할 로그의 형식을 지정-->
+            <Pattern>%d %5p [%c] %m%n</Pattern>
+        </encoder>
+    </appender>
+
+    <appender name="console-infolog" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <Pattern>%d %5p %m%n</Pattern>
+        </encoder>
+    </appender>
+
+    <!-- Logger -->
+    <!-- logger : 로그를 출력하는 요소로 level 속성을 통해 출력할 로그의 레벨을 조절하여 appender에 전달-->
+    <!-- 첫 번째 logger에서 com.example.BootJPABoard는 src/main/java디렉토리 안의 자바 패키지 경로를 의미-->
+    <!-- log의 레벨 fatal: 아주 심각한 에러 발생 error:요청을 처리하던 중 문제 발생, warn: 프로그램실행에는 문제없지만 나중에 시스템에러의 원인이 될 수 있음-->
+    <!-- info 어떠한 상태 변경과 같은 정보성 메시지, debug: 개발 시에 디버그 용도로 사용하는 메시지 trace:디버그 레벨이 너무 광범위한 것을 해결하기 위해 좀 더 상세한 이벤트를 나타냄-->
+    <!-- log의 타입 sqlonly: sql을 로그로 남기며, preparedStatement와 관련된 파라미터는 자동으로 변경되어 sql 출력-->
+    <!-- sqltiming : sql과 sql실행시간을 출력, audit: ResultSet을 제외한 모든 JDBC 호출정보 출력, JDBC 관련 추적문제를 제외하고는 사용권장X-->
+    <!-- resultset : ResultSet을 포함한 모든 JDBC 호출 정보 출력, resulttable : sql조회결과를 테이블형태로 출력 -->
+    <!-- connection: connection의 연결과 종료에 관련한 로그를 출력. 커넥션 누수 문제 해결에 도움을 줌-->
+    <logger name="com.example.BootJPABoard" level="DEBUG" appender-ref="console"/>
+    <logger name="jdbc.sqlonly" level="INFO" appender-ref="console-infolog"/>
+    <logger name="jdbc.resultsettable" level="INFO" appender-ref="console-infolog"/>
+
+    <!-- Root Logger -->
+    <root level="off">
+        <appender-ref ref="console"/>
+    </root>
+</configuration>
