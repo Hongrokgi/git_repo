@@ -26,7 +26,7 @@ public class BoardResponseDto {
     public BoardResponseDto(Board entity) {
         this.id=entity.getId();
         this.title=entity.getTitle();
-        this.content=entity.getTitle();
+        this.content=entity.getContent();
         this.writer= entity.getWriter();
         this.hits=entity.getHits();
         this.deleteYn= entity.getDeleteYn();
