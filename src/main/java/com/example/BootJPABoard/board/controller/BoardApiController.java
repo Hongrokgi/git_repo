@@ -88,6 +88,7 @@ public class BoardApiController {
                         System.out.println("성공");
                     }
                 }catch (Exception e) {
+
                 }
             }
         }else {
@@ -123,12 +124,12 @@ public class BoardApiController {
         var boardId = id;
         List<FileResponseDto> list =fileService.findByNo(boardId);
         System.out.println(list);
-        model.addAttribute("board",board);
-        if(!list.isEmpty()) {
-            model.addAttribute("list",list);
+        if(board != null) {
+            model.addAttribute("board",board);
+            if(!list.isEmpty()) {
+                model.addAttribute("list",list);
+            }
         }
-
-
         return "board/view";
     }
 }

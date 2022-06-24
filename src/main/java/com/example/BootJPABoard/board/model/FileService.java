@@ -28,7 +28,6 @@ public class FileService {
 
     public List<FileResponseDto> findByNo(final Long boardId) {
         List<File> list = fileRepository.findAllByBoardId(boardId);
-        //System.out.println(list);
         return list.stream().map(FileResponseDto::new).collect(Collectors.toList());
     }
 

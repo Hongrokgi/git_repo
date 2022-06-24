@@ -26,8 +26,7 @@ public class BoardService {
     private final BoardRepository boardRepository; //JPA Repository 보통 @Autowired로 빈 주입을 했었는데 스프링은 생성자로 빈을 주입하는 방식 선호
     private final FileRepository fileRepository;
     /*게시글 생성*/
-    //Transactional JPA를 사용한다면 서비스(Service) 클래스에서 필수적으로 사용되어야 하는 어노테이션, 일반적으로 메서드 레벨에서 선언
-    //메서드의 실행,종료,예외를 기준으로 각각 실행(begin),종료(Commit)예외(Rollback)를 자동으로처리
+
     @Transactional
     public Long save(final BoardRequestDto params) {
         Board entity = boardRepository.save(params.toEntity());
@@ -48,7 +47,7 @@ public class BoardService {
         entity.delete();
         return id;
     }
-    // delete와 update는 유사한 형태를 갖는데 다만 조회한 Entity를 수정하느냐, 삭제하느냐만의 차이를 갖는다.
+
     /*게시글 리스트 조회*/
     public List<BoardResponseDto> findAll() {
         Sort sort = Sort.by(Sort.Direction.DESC, "id", "createdDate");
