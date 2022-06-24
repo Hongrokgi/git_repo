@@ -23,7 +23,7 @@ public class DatabaseConfig {
       return new HikariDataSource(hikariConfig());
   }
 
-
+  
 }
 //스프링 부트에서 데이터소스 설정은 크게 두 가지.
 //Bean 어노테이션 혹은 application.properties

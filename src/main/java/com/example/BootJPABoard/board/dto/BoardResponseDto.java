@@ -1,6 +1,7 @@
 package com.example.BootJPABoard.board.dto;
 
 import com.example.BootJPABoard.board.entity.Board;
+import lombok.Getter;
 
 import java.time.LocalDateTime;
 
@@ -14,6 +15,8 @@ public class BoardResponseDto {
     private LocalDateTime createdDate;
     private LocalDateTime modifiedDate;
 
+    private Long fileId;
+
     public Long getId() {return id;}
     public String getTitle() {return title;}
     public String getContent() {return content;}
@@ -22,6 +25,8 @@ public class BoardResponseDto {
     public char getDeleteYn() {return deleteYn;}
     public LocalDateTime getCreatedDate() {return createdDate;}
     public LocalDateTime getModifiedDate() {return modifiedDate;}
+
+    public Long getFileId() {return fileId;}
 
     public BoardResponseDto(Board entity) {
         this.id=entity.getId();
@@ -32,6 +37,7 @@ public class BoardResponseDto {
         this.deleteYn= entity.getDeleteYn();
         this.createdDate=entity.getCreatedDate();
         this.modifiedDate=entity.getModifiedDate();
+
     }
 }
 // 응답도 마찬가지로 Entity클래스가 사용되서는 안되기 때문에 클래스를 분리

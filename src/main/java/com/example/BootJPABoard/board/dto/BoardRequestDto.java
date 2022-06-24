@@ -4,13 +4,18 @@ import com.example.BootJPABoard.board.entity.Board;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Setter
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 public class BoardRequestDto {
     private String title;   //제목
     private String content; //내용
     private String writer;  //작성자
     private char deleteYn;  //삭제 여부
+
+    private Long fileId;
 
     public Board toEntity() {
         return Board.builder()
@@ -18,7 +23,7 @@ public class BoardRequestDto {
                 .content(content)
                 .writer(writer)
                 .hits(0)
-                .deleteYn(deleteYn)
+                .deleteYn('N')
                 .build();
     }
 }

@@ -11,7 +11,7 @@
             <option value="writer">작성자</option>
         </select>
         <input type="text" id="searchKeyword" class="form-control" placeholder="키워드를 입력해 주세요." style="width: 300px;" />
-        <button type="button" class="btn btn-primary">
+        <button type="button" onclick="search();" class="btn btn-primary">
             <span aria-hidden="true" class="glyphicon glyphicon-search"></span>
         </button>
     </div>
@@ -93,6 +93,9 @@
 		}
             function goView(id){
                 location.href=`/board/view/${id}`;
+            }
+            function search() {
+                alert('이벤트 연결');
             }
 	/*]]>*/
     </script>

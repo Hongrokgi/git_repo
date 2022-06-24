@@ -2,7 +2,7 @@
 <html lang="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
     <th:block layout:fragment="content">
         <div class="card-content">
-            <form id="form" class="form-horizontal">
+            <form id="form" class="form-horizontal" enctype="multipart/form-data">
                 <div class="form-group">
                     <label for="title" class="col-sm-2 control-label">제목</label>
                     <div class="col-sm-10">
@@ -19,6 +19,16 @@
                     <label for="content" class="col-sm-2 control-label">내용</label>
                     <div class="col-sm-10">
                         <textarea id="content" class="form-control" placeholder="내용을 입력해주세요."></textarea>
+                    </div>
+                </div>
+                <!--24~33파일업로드-->
+                <div class="form-group">
+                   <label for="inputFile" class="col-sm-2 col-form-label"><strong>첨부파일</strong></label>
+                    <div class="col-sm-10">
+                        <div class="custom-file" id="inputFile">
+                                <input type="file" name="file" class="custom-file-input" id="customFile" multiple="multiple">
+                                <label class="custom-file-label" for="customFile">파일을 선택해주세요</label>
+                        </div>
                     </div>
                 </div>
 
@@ -102,40 +112,49 @@
          * 게시글 등록(생성/수정)
          */
         function save() {
+            var form = document.getElementById('form');
+            var formData = new FormData(form);
+            var inputFiles = $("input[name='file']")
+            var files = inputFiles[0].files;
+            var title = form.title.value;
+            var writer = form.writer.value;
+            var content = form.content.value;
 
-        	if ( !isValid() ) {
-        		return false;
-        	}
+            if(files.length != 0) {
+                formData.append("title", title);
+                formData.append("writer", writer);
+                formData.append("content", content);
+                for(var i = 0; i<files.length; i++){
+                   formData.append("uploadFile", files[i]);
+                }
+            }else {
+                formData.append("title", title);
+                formData.append("writer", writer);
+                formData.append("content", content);
+                }
 
-        	const form = document.getElementById('form');
-        	const params = {
-        		title: form.title.value,
-        		writer: form.writer.value,
-        		content: form.content.value,
-        		deleteYn: 'N'
-        	};
 
-        	const id = /*[[ ${id} ]]*/;
-        	const uri = ( id ) ? `/api/boards/${id}` : '/api/boards';
-        	const method = ( id ) ? 'PATCH' : 'POST';
 
-        	fetch(uri, {
-        		method: method,
-        		headers: { 'Content-Type': 'application/json' },
-        		body: JSON.stringify(params)
+           $.ajax({
+             url : '/api/boards',
+             processData : false,
+             contentType: false,
+             data : formData,
+             type : "POST",
+             success : function(result) {
+                alert("게시글이 등록되었습니다!");
+                location.href = '/board/list';
+             }
+           });
 
-        	}).then(response => {
-        		if (!response.ok) {
-        			throw new Error('Request failed...');
-        		}
 
-        		alert('저장되었습니다.');
-        		location.href = '/board/list';
 
-        	}).catch(error => {
-        		alert('오류가 발생하였습니다.');
-        	});
+
+
+
         }
+
+
 
 	/*]]>*/
         </script>

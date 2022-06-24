@@ -2,8 +2,11 @@ package com.example.BootJPABoard.board.model;
 
 import com.example.BootJPABoard.board.dto.BoardRequestDto;
 import com.example.BootJPABoard.board.dto.BoardResponseDto;
+import com.example.BootJPABoard.board.dto.FileResponseDto;
 import com.example.BootJPABoard.board.entity.Board;
 import com.example.BootJPABoard.board.entity.BoardRepository;
+import com.example.BootJPABoard.board.entity.File;
+import com.example.BootJPABoard.board.entity.FileRepository;
 import com.example.BootJPABoard.exception.CustomException;
 import com.example.BootJPABoard.exception.ErrorCode;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +24,7 @@ import java.util.stream.Collectors;
 //예를 들면 public BoardService(BoardRepository boardRepository) {this.boardRepository=repository}
 public class BoardService {
     private final BoardRepository boardRepository; //JPA Repository 보통 @Autowired로 빈 주입을 했었는데 스프링은 생성자로 빈을 주입하는 방식 선호
-
+    private final FileRepository fileRepository;
     /*게시글 생성*/
     //Transactional JPA를 사용한다면 서비스(Service) 클래스에서 필수적으로 사용되어야 하는 어노테이션, 일반적으로 메서드 레벨에서 선언
     //메서드의 실행,종료,예외를 기준으로 각각 실행(begin),종료(Commit)예외(Rollback)를 자동으로처리
@@ -65,6 +68,4 @@ public class BoardService {
         entity.increaseHits();
         return new BoardResponseDto(entity);
     }
-    //update와 delete와 유사하지만, 게시글의 조회수를 증가시킨 후에 게시글 정보를 리턴
-    //Entity클래스는 절대로 요청(Request)이나 응답(Response)에 사용되어서는 안된다.
 }
